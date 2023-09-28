@@ -17,6 +17,18 @@ class Company extends Model
       'parent_id',
   ];
 
+  public function companies() {
+    return $this->hasMany(Company::class, 'parent_id');
+  }
+
+  public function childrenCompanies() {
+    return $this->hasMany(Company::class, 'parent_id')->with(['companies', 'orderCompanies']);
+  }
+
+  public function orderCompanies() {
+    return $this->hasOne(OrderCompany::class);
+  }
+
   public static function companyTree($data, $parent_id = 0, $level = 0) {
     $result = [];
     foreach ($data as $key => $item) {
